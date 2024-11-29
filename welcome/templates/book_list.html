@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Header */
+        h1 {
+            font-size: 36px;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+
+        /* Book list styles */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        li {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #4a90e2;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        li a:hover {
+            color: #0056b3;
+        }
+
+        /* Search form styles */
+        form {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 70%;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form action="{% url 'book_search' %}" method="get">
+        <input type="text" name="q" placeholder="Search by title or author">
+        <button type="submit">Search</button>
+    </form>
+    <h1>Book List</h1>
+    <ul>
+        {% for book in books %}
+        {% if book.image %}
+        <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width: 200px;">
+        {% endif %}
+            <li><a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }}</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Header */
+        h1 {
+            font-size: 28px;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+
+        /* Book details */
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        p strong {
+            color: #333;
+        }
+
+        /* Links */
+        a {
+            display: inline-block;
+            margin: 10px 5px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #4a90e2;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Unavailable message */
+        p:not(.available-message) {
+            color: #cc0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ book.title }}</h1>
+    <p><strong>Author:</strong> {{ book.author.first_name }} {{ book.author.last_name }}</p>
+    <p><strong>Genres:</strong> {{ book.genre.all|join:", " }}</p>
+    <p><strong>Summary:</strong> {{ book.summary }}</p>
+    <p><strong>Available Copies:</strong> {{ book.available_copies }}</p>
+    <a href="{% url 'book_list' %}">Back to book list</a>
+    {% if book.available_copies > 0 %}
+        <a href="{% url 'borrow_book' book.pk %}">Borrow this book</a>
+    {% else %}
+        <p class="available-message">Not available for borrowing</p>
+    {% endif %}
+</body>
+</html>
