@@ -60,8 +60,11 @@
 <body>
     <h1>{{ book.title }}</h1>
     <p><strong>Author:</strong> {{ book.author.first_name }} {{ book.author.last_name }}</p>
-    <p><strong>Genres:</strong> {{ book.genre.all|join:", " }}</p>
-    <p><strong>Summary:</strong> {{ book.summary }}</p>
+    <p><strong>Genres:</strong> 
+        {% for genre in book.genre.all %}
+            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>    <p><strong>Summary:</strong> {{ book.summary }}</p>
     <p><strong>Available Copies:</strong> {{ book.available_copies }}</p>
     <a href="{% url 'book_list' %}">Back to book list</a>
     {% if book.available_copies > 0 %}

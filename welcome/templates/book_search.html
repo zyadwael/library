@@ -75,7 +75,7 @@
     <h1>Search Results for "{{ query }}"</h1>
     <ul>
         {% for book in books %}
-            <li><a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a></li>
+            <li><a href="{% url 'book_detail' book.pk %}" style="color: white;">{{ book.title }} by {{ book.author.first_name }} {{ book.author.last_name }}</a></li>
         {% empty %}
             <li>No books found.</li>
         {% endfor %}

@@ -6,6 +6,7 @@ from django.urls import reverse
 from .forms import UserRegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 
 def register(request):
     if request.method == 'POST':
@@ -42,7 +43,11 @@ def user_logout(request):
 
 def user_dashboard(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
-    return render(request, 'user_dashboard.html', {'borrowed_books': borrowed_books})
+    today_date = now().strftime("%b. %d, %Y")  # Format today's date like the database
+    return render(request, 'user_dashboard.html', {
+        'borrowed_books': borrowed_books,
+        'today_date': today_date
+    })
 
 
 
@@ -82,3 +87,21 @@ def borrow_book(request, pk):
             due_date=date.today() + timedelta(days=14)
         )
     return HttpResponseRedirect(reverse('book_list'))
+
+
+@login_required
+def return_book(request, borrow_id):
+    borrow = get_object_or_404(Borrow, id=borrow_id, user=request.user)
+    
+    # Get the book associated with the borrow record
+    book = borrow.book
+    
+    # Increment the available copies of the book
+    book.available_copies += 1
+    book.save()
+    
+    # Delete the borrow record (book returned)
+    borrow.delete()
+    
+    # Redirect to the user's dashboard after returning the book
+    return redirect('user_dashboard')

@@ -12,6 +12,8 @@ urlpatterns = [
     path('search/', views.book_search, name='book_search'),
     path('book/<int:pk>/borrow/', views.borrow_book, name='borrow_book'),
     path('dashboard/', views.user_dashboard, name='user_dashboard'),
+    path('return/<int:borrow_id>/', views.return_book, name='return_book'),
+
 ]
 
 if settings.DEBUG:

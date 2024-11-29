@@ -6,70 +6,94 @@
     <title>Your Borrowed Books</title>
     <style>
         /* General styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
 
-/* Header */
-h1 {
-    font-size: 28px;
-    color: #4a90e2;
-    margin-bottom: 20px;
-    text-align: center;
-}
+        /* Header */
+        h1 {
+            font-size: 28px;
+            color: #4a90e2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-/* List of borrowed books */
-ul {
-    list-style-type: none;
-    padding: 0;
-    max-width: 600px;
-    margin: 0 auto;
-}
+        /* List of borrowed books */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-li {
-    background-color: #fff;
-    margin: 10px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+        li {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-li strong {
-    color: #4a90e2;
-}
+        li strong {
+            color: #4a90e2;
+        }
 
-/* No books message */
-li:last-child {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-}
+        /* Warning sign */
+        .warning {
+            color: #e94e77;
+            font-weight: bold;
+            margin-left: 10px;
+        }
 
-/* Back link */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #4a90e2;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 8px;
-    width: 200px;
-    margin: 20px auto 0;
-    transition: background-color 0.3s;
-}
+        /* No books message */
+        li:last-child {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+        }
 
-a:hover {
-    background-color: #357ab8;
-}
+        /* Back link */
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4a90e2;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            width: 200px;
+            margin: 20px auto 0;
+            transition: background-color 0.3s;
+        }
 
+        a:hover {
+            background-color: #357ab8;
+        }
+
+        /* Return button */
+        .return-btn {
+            background-color: #e94e77;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .return-btn:hover {
+            background-color: #d13e63;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +101,16 @@ a:hover {
     <ul>
         {% for borrow in borrowed_books %}
             <li>
-                <strong>{{ borrow.book.title }}</strong> - Due on {{ borrow.due_date }}
+                <div>
+                    <strong>{{ borrow.book.title }}</strong> - Due on {{ borrow.due_date|date:"M. d, Y" }}
+                    {% if borrow.due_date|date:"M. d, Y" == today_date %}
+                        <span class="warning">⚠️ Due Today!</span>
+                    {% endif %}
+                </div>
+                <form action="{% url 'return_book' borrow.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="return-btn">Return</button>
+                </form>
             </li>
         {% empty %}
             <li>You have no borrowed books.</li>
