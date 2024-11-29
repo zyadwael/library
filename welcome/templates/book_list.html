@@ -58,6 +58,7 @@
             margin: 20px auto;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 10px;
         }
 
@@ -66,7 +67,14 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
-            width: 70%;
+            width: 50%;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
         button {
@@ -87,7 +95,12 @@
 </head>
 <body>
     <form action="{% url 'book_search' %}" method="get">
-        <input type="text" name="q" placeholder="Search by title or author">
+        <select name="search_type">
+            <option value="book" selected>Book</option>
+            <option value="author">Author</option>
+            <option value="genre">Genre</option>
+        </select>
+        <input type="text" name="q" placeholder="Enter your search">
         <button type="submit">Search</button>
     </form>
     <h1>Book List</h1>
@@ -99,6 +112,5 @@
             <li><a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a></li>
         {% endfor %}
     </ul>
-
 </body>
 </html>

@@ -57,7 +57,17 @@ def book_detail(request, pk):
 
 def book_search(request):
     query = request.GET.get('q', '')
-    books = Book.objects.filter(title__icontains=query) | Book.objects.filter(author__first_name__icontains=query)
+    search_type = request.GET.get('search_type', 'book')
+
+    if search_type == 'book':
+        books = Book.objects.filter(title__icontains=query)
+    elif search_type == 'author':
+        books = Book.objects.filter(author__first_name__icontains=query) | Book.objects.filter(author__last_name__icontains=query)
+    elif search_type == 'genre':
+        books = Book.objects.filter(genre__name__icontains=query)
+    else:
+        books = Book.objects.none()  # Return an empty queryset if no valid search type is selected
+
     return render(request, 'book_search.html', {'books': books, 'query': query})
 
 
