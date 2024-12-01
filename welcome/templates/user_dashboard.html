@@ -38,19 +38,28 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center align content */
+            text-align: center;
+        }
+
+        li img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
         }
 
         li strong {
             color: #4a90e2;
+            font-size: 18px;
         }
 
         /* Warning sign */
         .warning {
             color: #e94e77;
             font-weight: bold;
-            margin-left: 10px;
+            margin-top: 5px;
         }
 
         /* No books message */
@@ -101,13 +110,13 @@
     <ul>
         {% for borrow in borrowed_books %}
             <li>
-                <div>
-                    <strong>{{ borrow.book.title }}</strong> - Due on {{ borrow.due_date|date:"M. d, Y" }}
-                    {% if borrow.due_date|date:"M. d, Y" == today_date %}
-                        <span class="warning">⚠️ Due Today!</span>
-                    {% endif %}
-                </div>
-                <form action="{% url 'return_book' borrow.pk %}" method="post">
+                <img src="{{ borrow.book.image.url }}" alt="{{ borrow.book.title }}">
+                <strong>{{ borrow.book.title }}</strong>
+                <span>Due on {{ borrow.due_date|date:"M. d, Y" }}</span>
+                {% if borrow.due_date|date:"M. d, Y" == today_date %}
+                    <span class="warning">⚠️ Due Today!</span>
+                {% endif %}
+                <form action="{% url 'return_book' borrow.pk %}" method="post" style="margin-top: 10px;">
                     {% csrf_token %}
                     <button type="submit" class="return-btn">Return</button>
                 </form>
